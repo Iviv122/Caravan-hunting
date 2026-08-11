@@ -5,7 +5,6 @@ namespace CaravanHunting
     public class Main : Mod
     {
         //internal static ModSettings Settings { get; set; }
-
         public Main(ModContentPack content) : base(content)
         {
             Log.Message("Hello World! It had loaded YOHO");
