@@ -1,6 +1,6 @@
 ﻿using Verse;
 
-namespace CaravanAdventures
+namespace CaravanHunting
 {
     public class Main : Mod
     {

@@ -1,12 +1,16 @@
 ﻿
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+	    <OutputType>Library</OutputType>
 		<OutputPath>..\Assemblies</OutputPath>
 		<TargetFramework>net472</TargetFramework>
+		<RootNamespace>CaravanHunting</RootNamespace>
+	    <AssemblyName>CaravanHunting</AssemblyName>
 		<AssemblyTitle>Diet Filters In Storage</AssemblyTitle>
 		<AssemblyVersion>2024.0721.1</AssemblyVersion>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		 <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -15,6 +19,12 @@
 		<Optimize>false</Optimize>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+ <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
 		<DebugType>none</DebugType>
 		<Optimize>true</Optimize>
 	</PropertyGroup>
@@ -37,4 +47,5 @@
 			<HintPath>..\..\..\RimWorldLinux_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
 		</Reference>
 	</ItemGroup>
+
 </Project>
