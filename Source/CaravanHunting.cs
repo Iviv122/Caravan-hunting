@@ -43,11 +43,14 @@ namespace CaravanHunting
             base.PostExposeData();
             Scribe_Values.Look(ref isHunting, "allowNightTravel", false);
         }
-        private void GetCaravan(){
-            if(Caravan != null){
+        private void GetCaravan()
+        {
+            if (Caravan != null)
+            {
                 return;
             }
-            if(parent is Caravan){
+            if (parent is Caravan)
+            {
                 Caravan = parent as Caravan;
             }
         }
@@ -56,10 +59,12 @@ namespace CaravanHunting
         {
             if (progress == TicksToFinish)
             {
-                if(Caravan == null){
+                if (Caravan == null)
+                {
                     GetCaravan();
                 }
-                if(Caravan != null){
+                if (Caravan != null)
+                {
                     GiveItems(Caravan);
                 }
                 progress = 0;
@@ -78,19 +83,32 @@ namespace CaravanHunting
             .RandomElement();
 
 
-            ThingDef leather = animal.RaceProps.leatherDef ?? ThingDefOf.Leather_Plain;
-            Thing leather_res = ThingMaker.MakeThing(leather);
-            leather_res.stackCount = (int)
-            (
-                animal.race.GetStatValueAbstract(StatDefOf.LeatherAmount)
-                * Find.Storyteller.difficulty.butcherYieldFactor
-            );
-            CaravanInventoryUtility.GiveThing(caravan, leather_res);
+            for (int i = 0; i < caravan.pawns.Count; i++)
+            {
+                ThingDef leather = animal.RaceProps.leatherDef ?? ThingDefOf.Leather_Plain;
+                Thing leather_res = ThingMaker.MakeThing(leather);
+                leather_res.stackCount = GenMath.RoundRandom
+                (
+                    animal.race.GetStatValueAbstract(StatDefOf.LeatherAmount)
+                    * Find.Storyteller.difficulty.butcherYieldFactor
+                    * caravan.pawns[i].GetStatValue(MyDefsOf.ButcheryFleshEfficiency)
+                    * 0.7f // same as butcher spot
+                );
+                CaravanInventoryUtility.GiveThing(caravan, leather_res);
 
-            ThingDef meat = animal.RaceProps.meatDef ?? ThingDefOf.Cow.race.meatDef;
-            Thing meat_res = ThingMaker.MakeThing(meat);
-            meat_res.stackCount = (int)animal.race.GetStatValueAbstract(StatDefOf.MeatAmount);
-            CaravanInventoryUtility.GiveThing(caravan, meat_res);
+                ThingDef meat = animal.RaceProps.meatDef ?? ThingDefOf.Cow.race.meatDef;
+                Thing meat_res = ThingMaker.MakeThing(meat);
+                meat_res.stackCount = GenMath.RoundRandom
+                (
+                    animal.race.GetStatValueAbstract(StatDefOf.MeatAmount)
+                    * Find.Storyteller.difficulty.butcherYieldFactor
+                    * caravan.pawns[i].GetStatValue(MyDefsOf.ButcheryFleshEfficiency)
+                    * 0.7f // same as butcher spot
+                );
+                CaravanInventoryUtility.GiveThing(caravan, meat_res);
+            }
+
+
 
         }
 
