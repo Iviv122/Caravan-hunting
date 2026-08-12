@@ -6,14 +6,20 @@ using UnityEngine;
 
 namespace CaravanHunting
 {
-    public class CompCaravanDecisions : WorldObjectComp
+    public class CaravanHunting : WorldObjectComp
     {
+        public float progress = 0;
         public bool isHunting = false;
+        public const float TicksToFinish = 4*GenDate.TicksPerHour;
 
         public override void PostExposeData()
         {
             base.PostExposeData();
             Scribe_Values.Look(ref isHunting, "allowNightTravel", false);
+        }
+
+        public void ResetProgress(){
+            progress = 0;
         }
 
         public override IEnumerable<Gizmo> GetCaravanGizmos(Caravan caravan)
@@ -23,7 +29,10 @@ namespace CaravanHunting
                 var cmdAllowNightTravel = new Command_Toggle
                 {
                     isActive = () => isHunting,
-                    toggleAction = () => isHunting = !isHunting,
+                    toggleAction = () => {
+                        isHunting = !isHunting;
+                        ResetProgress();
+                    },
                     defaultLabel = "Hunt along way",
                     defaultDesc = "Your colonists will hunt while wander, it will increase their visibility and slow them down",
                     Order = 199f,
@@ -34,6 +43,13 @@ namespace CaravanHunting
             yield break;
         }
 
+        public override void CompTick()
+        {
+            progress += 1;
+        }
+        public string GetProgress(){
+            return (100*progress/TicksToFinish).ToString();
+        }
 
     }
 }

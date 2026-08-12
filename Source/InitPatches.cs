@@ -20,7 +20,7 @@ namespace CaravanHunting
 
                 caravanDef.comps.Add(
                     new WorldObjectCompProperties()
-                    { compClass = typeof(CompCaravanDecisions) }
+                    { compClass = typeof(CaravanHunting) }
                 );
             }
         }
