@@ -69,7 +69,10 @@ namespace CaravanHunting
                 }
                 progress = 0;
             }
-            progress += 1;
+            if (!Caravan.NightResting)
+            { // can't hunt while sleep
+                progress += 1;
+            }
         }
         public string GetProgress()
         {
@@ -82,7 +85,7 @@ namespace CaravanHunting
             .OrderByDescending(caravan.Biome.CommonalityOfAnimal)
             .RandomElement();
 
-            int val =  Random.Range(1,caravan.pawns.Count);
+            int val = Random.Range(1, caravan.pawns.Count);
             for (int i = 0; i < val; i++)
             {
                 ThingDef leather = animal.RaceProps.leatherDef ?? ThingDefOf.Leather_Plain;
