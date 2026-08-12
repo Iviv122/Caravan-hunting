@@ -17,10 +17,11 @@ namespace CaravanHunting
             var caravanDef = WorldObjectDefOf.Caravan;
             if (caravanDef != null)
             {
-
                 caravanDef.comps.Add(
                     new WorldObjectCompProperties()
-                    { compClass = typeof(CaravanHunting) }
+                    {
+                        compClass = typeof(CaravanHunting)
+                    }
                 );
             }
         }
