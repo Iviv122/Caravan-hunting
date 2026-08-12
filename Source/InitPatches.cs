@@ -18,7 +18,6 @@ namespace CaravanHunting
             if (caravanDef != null)
             {
 
-                Log.Message("Hello From Patcher!!");
                 caravanDef.comps.Add(
                     new WorldObjectCompProperties()
                     { compClass = typeof(CompCaravanDecisions) }
