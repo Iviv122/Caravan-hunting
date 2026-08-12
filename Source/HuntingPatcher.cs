@@ -26,7 +26,7 @@ namespace CaravanHunting
                 if (cmp != null)
                 {
                     StringBuilder build = new StringBuilder(__result);
-                    __result = build.Append(cmp.isHunting ? $"\nHunting right now: {cmp.GetProgress()}%" : "").ToString();
+                    __result = build.Append(cmp.isHunting ? $"\nHunting right now: {cmp.GetProgress()}% {cmp.hunters} colonists are hunting now" : "").ToString();
                 }
             }
         }
