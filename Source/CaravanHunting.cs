@@ -82,7 +82,9 @@ namespace CaravanHunting
             .OrderByDescending(caravan.Biome.CommonalityOfAnimal)
             .RandomElement();
 
-
+            int val =  Random.Range(1,caravan.pawns.Count);
+            for (int i = 0; i < val; i++)
+            {
                 ThingDef leather = animal.RaceProps.leatherDef ?? ThingDefOf.Leather_Plain;
                 Thing leather_res = ThingMaker.MakeThing(leather);
                 leather_res.stackCount = GenMath.RoundRandom
@@ -96,6 +98,7 @@ namespace CaravanHunting
 
                 ThingDef meat = animal.RaceProps.meatDef ?? ThingDefOf.Cow.race.meatDef;
                 Thing meat_res = ThingMaker.MakeThing(meat);
+                meat_res.stackCount = (int)animal.race.GetStatValueAbstract(StatDefOf.MeatAmount);
                 meat_res.stackCount = GenMath.RoundRandom
                 (
                     animal.race.GetStatValueAbstract(StatDefOf.MeatAmount)
@@ -104,6 +107,8 @@ namespace CaravanHunting
                     * 0.7f // same as butcher spot
                 );
                 CaravanInventoryUtility.GiveThing(caravan, meat_res);
+            }
+
 
 
         }
