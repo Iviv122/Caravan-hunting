@@ -5,6 +5,8 @@ using Verse;
 using UnityEngine;
 using System.Linq;
 
+// TODO: save handle
+
 namespace CaravanHunting
 {
     public class CaravanHunting : WorldObjectComp
@@ -41,7 +43,8 @@ namespace CaravanHunting
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Values.Look(ref isHunting, "allowNightTravel", false);
+            Scribe_Values.Look(ref isHunting, "IsHunting", false);
+            Scribe_Values.Look(ref progress, "huntingProgress", 0);
         }
         private void GetCaravan()
         {
@@ -57,12 +60,13 @@ namespace CaravanHunting
         // game logic
         public override void CompTick()
         {
+            GetCaravan();
+            if (Caravan == null)
+            {
+                return;
+            }
             if (progress == TicksToFinish)
             {
-                if (Caravan == null)
-                {
-                    GetCaravan();
-                }
                 if (Caravan != null)
                 {
                     GiveItems(Caravan);
