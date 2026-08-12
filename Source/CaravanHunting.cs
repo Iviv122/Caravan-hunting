@@ -6,6 +6,8 @@ using UnityEngine;
 using System.Linq;
 using System;
 
+
+// TODO: Settings
 namespace CaravanHunting
 {
     public class CaravanHunting : WorldObjectComp
@@ -46,7 +48,7 @@ namespace CaravanHunting
                     defaultLabel = "Hunt along way",
                     defaultDesc = "Your colonists will hunt while wander, it will increase their visibility and slow them down",
                     Order = 199f,
-                    icon = ContentFinder<Texture2D>.Get("UI/Icon/Hunting", true),
+                    icon = ContentFinder<Texture2D>.Get("UI/Commands/AnimalAttack", true),
                     Disabled = hunters <= 0,
                     disabledReason = "No colonists capable of violence",
                 };
