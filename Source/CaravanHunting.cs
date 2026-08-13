@@ -48,9 +48,9 @@ namespace CaravanHunting
                     defaultLabel = "Hunt along way",
                     defaultDesc = "Your colonists will hunt while wander, it will increase their visibility and slow them down",
                     Order = 199f,
-                    icon = ContentFinder<Texture2D>.Get("UI/Commands/AnimalAttack", true),
-                    Disabled = hunters <= 0,
-                    disabledReason = "No colonists capable of violence",
+                    icon = ContentFinder<Texture2D>.Get("UI/Icons/Animal/Hunt", true),
+                    Disabled = hunters <= 0 || Mathf.Approximately(best_efficiency,0),
+                    disabledReason = "No colonists capable of violence or butchering",
                 };
                 yield return cmdAllowNightTravel;
             }
@@ -75,7 +75,9 @@ namespace CaravanHunting
                 if (!Caravan.pawns[i].WorkTagIsDisabled(WorkTags.Violent) && !Caravan.pawns[i].NonHumanlikeOrWildMan())
                 {
                     hunters += 1;
-                    best_efficiency = Mathf.Max(best_efficiency, Caravan.pawns[i].GetStatValue(MyDefsOf.ButcheryFleshEfficiency));
+                    if(!Caravan.pawns[i].WorkTagIsDisabled(WorkTags.Cooking)){
+                        best_efficiency = Mathf.Max(best_efficiency, Caravan.pawns[i].GetStatValue(MyDefsOf.ButcheryFleshEfficiency));
+                    }
                 }
             }
         }
