@@ -16,6 +16,7 @@ namespace CaravanHunting
         public bool isHunting = false;
         public const int TicksToFinish = 4 * GenDate.TicksPerHour;
 
+        private Command_Toggle cmdAllowHuntnig = null;
         public Caravan Caravan;
 
         public int hunters = 0;
@@ -35,26 +36,42 @@ namespace CaravanHunting
         {
             GetCaravan();
             CountCombatans();
-            if (Find.WorldSelector.SingleSelectedObject == this.parent && this.parent != null && this.parent.Faction != null && this.parent.Faction == Faction.OfPlayerSilentFail)
+            CountEfficiency();
+
+            if (Find.WorldSelector.SingleSelectedObject == parent
+                && parent != null
+                && parent.Faction != null
+                && parent.Faction == Faction.OfPlayerSilentFail)
             {
-                var cmdAllowNightTravel = new Command_Toggle
+                cmdAllowHuntnig = new Command_Toggle
                 {
                     isActive = () => isHunting,
+
                     toggleAction = () =>
                     {
                         isHunting = !isHunting;
                         ResetProgress();
                     },
+
                     defaultLabel = "Hunt along way",
-                    defaultDesc = "Your colonists will hunt while wander, it will increase their visibility and slow them down",
+                    defaultDesc = $"Your colonists will hunt while wandering. " +
+                                  $"It will increase their visibility and slow them down.\n" +
+                                  $"Butchery efficiency: {best_efficiency * 0.7f}\n" +
+                                  $"Hunters: {hunters}",
+
                     Order = 199f,
-                    icon = ContentFinder<Texture2D>.Get("UI/Icons/Animal/Hunt", true),
-                    Disabled = hunters <= 0 || Mathf.Approximately(best_efficiency,0),
-                    disabledReason = "No colonists capable of violence or butchering",
+
+                    icon = ContentFinder<Texture2D>.Get(
+                        "UI/Icons/Animal/Hunt",
+                        true
+                    ),
+
+                    Disabled = hunters <= 0 || best_efficiency <= 0,
+                    disabledReason = DisableReason(),
                 };
-                yield return cmdAllowNightTravel;
+
+                yield return cmdAllowHuntnig;
             }
-            yield break;
         }
         public override void PostExposeData()
         {
@@ -72,14 +89,58 @@ namespace CaravanHunting
             }
             for (int i = 0; i < Caravan.pawns.Count; i++)
             {
-                if (!Caravan.pawns[i].WorkTagIsDisabled(WorkTags.Violent) && !Caravan.pawns[i].NonHumanlikeOrWildMan())
+                if (!Caravan.pawns[i].WorkTagIsDisabled(WorkTags.Violent)
+                    && !Caravan.pawns[i].NonHumanlikeOrWildMan()
+                    && HasRangedWeapon(Caravan.pawns[i])
+                )
                 {
                     hunters += 1;
-                    if(!Caravan.pawns[i].WorkTagIsDisabled(WorkTags.Cooking)){
-                        best_efficiency = Mathf.Max(best_efficiency, Caravan.pawns[i].GetStatValue(MyDefsOf.ButcheryFleshEfficiency));
-                    }
                 }
             }
+            UpdateIsDisabled();
+        }
+        private void UpdateIsDisabled()
+        {
+            cmdAllowHuntnig?.Disabled = hunters <= 0 || Mathf.Approximately(best_efficiency, 0);
+            cmdAllowHuntnig?.disabledReason = DisableReason();
+        }
+        private string DisableReason()
+        {
+            if (Mathf.Approximately(best_efficiency, 0))
+            {
+                return "No butchers with efficiency better than zero";
+            }
+            if (hunters == 0)
+            {
+                return "No hunters with ranged weapons";
+            }
+
+            return "Error";
+        }
+        private bool HasRangedWeapon(Pawn p)
+        {
+            if (p.equipment.Primary != null)
+            {
+                return p.equipment.Primary.def.IsRangedWeapon;
+            }
+            return false;
+
+        }
+        private void CountEfficiency()
+        {
+            best_efficiency = 0;
+            if (Caravan == null)
+            {
+                return;
+            }
+            for (int i = 0; i < Caravan.pawns.Count; i++)
+            {
+                if (!Caravan.pawns[i].WorkTagIsDisabled(WorkTags.Cooking))
+                {
+                    best_efficiency = Mathf.Max(best_efficiency, Caravan.pawns[i].GetStatValue(MyDefsOf.ButcheryFleshEfficiency));
+                }
+            }
+            UpdateIsDisabled();
         }
         private void GetCaravan()
         {
@@ -92,6 +153,12 @@ namespace CaravanHunting
         public override void CompTick()
         {
             GetCaravan();
+            CountCombatans();
+            CountEfficiency();
+            if (!isHunting)
+            {
+                return;
+            }
             if (Caravan == null)
             {
                 return;
