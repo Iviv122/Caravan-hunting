@@ -56,7 +56,7 @@ namespace CaravanHunting
                     defaultLabel = "Hunt along way",
                     defaultDesc = $"Your colonists will hunt while wandering. " +
                                   $"It will increase their visibility and slow them down.\n" +
-                                  $"Butchery efficiency: {best_efficiency * 0.7f}\n" +
+                                  $"Butchery efficiency: {Math.Round(best_efficiency * 0.7f,2)}\n" +
                                   $"Hunters: {hunters}",
 
                     Order = 199f,
