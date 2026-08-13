@@ -141,7 +141,7 @@ namespace CaravanHunting
             {
                 if (!Caravan.pawns[i].WorkTagIsDisabled(WorkTags.Cooking))
                 {
-                    best_efficiency = Mathf.Max(best_efficiency, Caravan.pawns[i].GetStatValue(MyDefsOf.ButcheryFleshEfficiency));
+                    best_efficiency = Mathf.Max(best_efficiency, Main.Settings.ButcheryEfficiencyMod * Caravan.pawns[i].GetStatValue(MyDefsOf.ButcheryFleshEfficiency));
                 }
             }
             UpdateIsDisabled();
