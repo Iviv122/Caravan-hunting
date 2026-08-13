@@ -14,7 +14,7 @@ namespace CaravanHunting
     {
         public float progress = 0;
         public bool isHunting = false;
-        public const int TicksToFinish = 4 * GenDate.TicksPerHour;
+        public int TicksToFinish => Main.Settings.HoursRequired * GenDate.TicksPerHour;
 
         private Command_Toggle cmdAllowHuntnig = null;
         public Caravan Caravan;
@@ -56,7 +56,7 @@ namespace CaravanHunting
                     defaultLabel = "Hunt along way",
                     defaultDesc = $"Your colonists will hunt while wandering. " +
                                   $"It will increase their visibility and slow them down.\n" +
-                                  $"Butchery efficiency: {Math.Round(best_efficiency * 0.7f,2)}\n" +
+                                  $"Butchery efficiency: {Math.Round(best_efficiency * Main.Settings.ButcheryEfficiencyMod, 2)}\n" +
                                   $"Hunters: {hunters}",
 
                     Order = 199f,
@@ -119,6 +119,10 @@ namespace CaravanHunting
         }
         private bool HasRangedWeapon(Pawn p)
         {
+            if (!Main.Settings.NeedRangeWeapon)
+            {
+                return true;
+            }
             if (p.equipment.Primary != null)
             {
                 return p.equipment.Primary.def.IsRangedWeapon;
@@ -205,7 +209,7 @@ namespace CaravanHunting
                     animal.race.GetStatValueAbstract(StatDefOf.LeatherAmount)
                     * Find.Storyteller.difficulty.butcherYieldFactor
                     * best_efficiency
-                    * 0.7f // same as butcher spot
+                    * Main.Settings.ButcheryEfficiencyMod
                 );
                 CaravanInventoryUtility.GiveThing(Caravan, leather_res);
 
@@ -217,15 +221,11 @@ namespace CaravanHunting
                     animal.race.GetStatValueAbstract(StatDefOf.MeatAmount)
                     * Find.Storyteller.difficulty.butcherYieldFactor
                     * best_efficiency
-                    * 0.7f // same as butcher spot
+                    * Main.Settings.ButcheryEfficiencyMod
                 );
                 CaravanInventoryUtility.GiveThing(Caravan, meat_res);
             }
-
-
-
         }
-
         public void ResetProgress()
         {
             progress = 0;
