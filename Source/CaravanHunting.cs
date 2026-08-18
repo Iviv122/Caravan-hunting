@@ -12,6 +12,7 @@ namespace CaravanHunting
 {
     public class CaravanHunting : WorldObjectComp
     {
+
         public float progress = 0;
         public bool isHunting = false;
         public int TicksToFinish => Main.Settings.HoursRequired * GenDate.TicksPerHour;
