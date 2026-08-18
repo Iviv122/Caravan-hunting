@@ -11,8 +11,21 @@ If your pawns are capable of butchering and violence + they have ranged weapon, 
 
 Everything is customizable besides skills requirements to stay fair.
 
-source code:
-https://github.com/Iviv122/Caravan-hunting
+build
+```
+git clone https://github.com/Iviv122/Caravan-hunting
+cd Source
+chmod +x build.sh
+./build.sh 
+```
+
+use:
+
+- Dotnet 11 Preview
+
+Dependencies:
+- HarmonyLib
+
 
 Q&A:
 - Q: CE compatible?
