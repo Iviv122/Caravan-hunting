@@ -21,12 +21,12 @@ namespace CaravanHunting
             Scribe_Values.Look(ref HoursRequired, "HoursRequired", 4);
             Scribe_Values.Look(ref NeedRangeWeapon, "NeedRangeWeapon", true);
             Scribe_Values.Look(ref MoveMultiplier, "MoveMultiplier", 0.8f);
-            Scribe_Values.Look(ref MoveMultiplier, "VisibilityModifier", 1.2f);
+            Scribe_Values.Look(ref VisibilityModifier, "VisibilityModifier", 1.2f);
         }
 
         public void DoWindowContents(Rect wrect)
         {
-            var viewRect = new Rect(0f, 0f, wrect.width - 20f, 300f);
+            var viewRect = new Rect(0f, 0f, wrect.width - 20f, 500f);
             Widgets.BeginScrollView(wrect, ref scrollPos, viewRect);
             var listing = new Listing_Standard();
             listing.Begin(viewRect);

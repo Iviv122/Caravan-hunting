@@ -44,9 +44,9 @@ namespace CaravanHunting
             var cmp = __instance.GetComponent<CaravanHunting>();
             if (cmp != null)
             {
-                if (cmp.isHunting)
+                if (cmp.isHunting && !__instance.NightResting)
                 {
-                    __result = __result * Main.Settings.VisibilityModifier;
+                    __result *= Main.Settings.VisibilityModifier;
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace CaravanHunting
             var cmp = __instance.GetComponent<CaravanHunting>();
             if (cmp != null)
             {
-                if (cmp.isHunting)
+                if (cmp.isHunting && !__instance.NightResting)
                 {
                     __result = (int)(__result / Main.Settings.MoveMultiplier);
                 }
