@@ -11,11 +11,12 @@ If your pawns are capable of butchering and violence + they have ranged weapon, 
 
 Everything is customizable besides skills requirements to stay fair.
 
-build
+build ***don't forget to change foldername from Rimworld___Data to your OS, place this repository into games mod folder. ***
 ```
 git clone https://github.com/Iviv122/Caravan-hunting
 cd Source
 chmod +x build.sh
+nuget install
 ./build.sh 
 ```
 
