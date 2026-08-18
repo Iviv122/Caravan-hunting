@@ -9,6 +9,7 @@ namespace CaravanHunting
         public float ButcheryEfficiencyMod = 0.7f;
         public bool NeedRangeWeapon = true;
 
+        public float VisibilityModifier = 1.2f;
         public float MoveMultiplier = 0.8f;
         private Vector2 scrollPos = Vector2.zero;
 
@@ -17,12 +18,10 @@ namespace CaravanHunting
             base.ExposeData();
 
             Scribe_Values.Look(ref ButcheryEfficiencyMod, "ButcheryEfficiencyMod", 0.7f);
-
             Scribe_Values.Look(ref HoursRequired, "HoursRequired", 4);
-
             Scribe_Values.Look(ref NeedRangeWeapon, "NeedRangeWeapon", true);
-
             Scribe_Values.Look(ref MoveMultiplier, "MoveMultiplier", 0.8f);
+            Scribe_Values.Look(ref MoveMultiplier, "VisibilityModifier", 1.2f);
         }
 
         public void DoWindowContents(Rect wrect)
@@ -47,6 +46,11 @@ namespace CaravanHunting
 
             listing.Gap();
 
+            listing.Label("Visibility while hunting: " + VisibilityModifier.ToString("0.00"));
+            VisibilityModifier = listing.Slider(VisibilityModifier, 0.1f, 2f);
+
+            listing.Gap();
+
             listing.CheckboxLabeled("Require a ranged weapon", ref NeedRangeWeapon, "When enabled, hunting requires the pawn to have a ranged weapon.");
 
             listing.GapLine();
@@ -56,6 +60,7 @@ namespace CaravanHunting
                 ButcheryEfficiencyMod = 0.7f;
                 MoveMultiplier = 0.8f;
                 NeedRangeWeapon = true;
+                VisibilityModifier = 1.2f;
             }
 
             listing.End();

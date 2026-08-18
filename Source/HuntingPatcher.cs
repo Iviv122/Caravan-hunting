@@ -21,6 +21,10 @@ namespace CaravanHunting
             var TravelNewTickMove = new HarmonyMethod(typeof(HuntingPatcher).GetMethod(nameof(GetTicksPermovePostFix)));
             HarmonyPatcher.harmony.Patch(TravelOrgTickMove, null, TravelNewTickMove);
 
+            var TravelOrgVisibility = AccessTools.PropertyGetter(typeof(Caravan), nameof(Caravan.Visibility));
+            var TravelNewVisibility = new HarmonyMethod(typeof(HuntingPatcher).GetMethod(nameof(VisibilityPostFix)));
+            HarmonyPatcher.harmony.Patch(TravelOrgVisibility, null, TravelNewVisibility);
+
             Log.Message("applied Hunting patch");
         }
         public static void DescPostFix(ref string __result, Caravan __instance)
@@ -35,6 +39,17 @@ namespace CaravanHunting
                 }
             }
         }
+        public static void VisibilityPostFix(ref float __result, Caravan __instance)
+        {
+            var cmp = __instance.GetComponent<CaravanHunting>();
+            if (cmp != null)
+            {
+                if (cmp.isHunting)
+                {
+                    __result = __result * Main.Settings.VisibilityModifier;
+                }
+            }
+        }
         public static void GetTicksPermovePostFix(ref int __result, Caravan __instance)
         {
             var cmp = __instance.GetComponent<CaravanHunting>();
@@ -42,9 +57,7 @@ namespace CaravanHunting
             {
                 if (cmp.isHunting)
                 {
-                    Log.Message($"Old MoveSpeed: {__result}");
                     __result = (int)(__result / Main.Settings.MoveMultiplier);
-                    Log.Message($"New MoveSpeed: {__result}");
                 }
             }
         }
